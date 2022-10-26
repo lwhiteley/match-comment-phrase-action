@@ -34,6 +34,7 @@ async function run(): Promise<void> {
 
     core.setOutput('match_found', matchFound)
     core.setOutput('comment_body', comment)
+    core.setOutput('pull_request_number', pullRequestNumber)
 
     if (!matchFound || !reactions) return
 

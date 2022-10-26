@@ -172,6 +172,7 @@ function run() {
             });
             core.setOutput('match_found', matchFound);
             core.setOutput('comment_body', comment);
+            core.setOutput('pull_request_number', pullRequestNumber);
             if (!matchFound || !reactions)
                 return;
             yield (0, add_reactions_1.addReactions)({ commentId, reactions, token: githubToken });
