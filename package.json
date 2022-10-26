@@ -1,6 +1,6 @@
 {
   "name": "match-comment-phrase-action",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "private": true,
   "description": "TypeScript template action",
   "main": "lib/main.js",
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/lwhiteley/match-comment-phrase-action.git"
   },
   "keywords": [
     "actions",

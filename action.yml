@@ -1,6 +1,6 @@
 name: 'match-comment-phrase-action'
 description: 'matches a phrase within a github comment and outputs a boolean value when found by a specific mode'
-author: 'Smart Host'
+author: 'Layton Whiteley'
 branding:
   icon: 'bell'
   color: 'purple'
