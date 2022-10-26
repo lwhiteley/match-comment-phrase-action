@@ -17,7 +17,7 @@ jobs:
   preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: lwhiteley/match-comment-phrase-action@v1.3.0
+      - uses: lwhiteley/match-comment-phrase-action@v1.4.0
         id: check
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
@@ -47,7 +47,6 @@ And if you specify a reaction, you have to provide the `GITHUB_TOKEN` env variab
 | phrase       | Yes                            | the phrase to look for in the issue comment. eg '/preview'                                                                                   |
 | mode         | No <br/>default: 'starts_line' | the mode is how the action checks for the phrase within the comment. possible values: starts_line, starts_comment, within                    |
 | include_code | No <br/>default: 'false'       | boolean to determine if the action should also search in code blocks or simple code snippets. Only practical with the "within" mode snippets |
-| pr_only      | No <br/>default 'false'        | 'When "true", limits action to run for pull requests only. Will throw error if pull request context is not found'                            |
 | reactions    | No <br/> default ''            | Comma separated list of valid reactions to add to the comment if phrase is found. For example, "rocket".                                     |
 
 ## Outputs

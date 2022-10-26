@@ -6,8 +6,7 @@ import {matchPhrase} from './match-phrase'
 
 async function run(): Promise<void> {
   try {
-    const {reactions, githubToken, isPrOnly, phrase, mode, isCodeIncluded} =
-      getInputs()
+    const {reactions, githubToken, phrase, mode, isCodeIncluded} = getInputs()
 
     if (reactions && !githubToken) {
       core.setFailed('If "reactions" is supplied, GITHUB_TOKEN is required')
@@ -20,11 +19,6 @@ async function run(): Promise<void> {
 
     const pullRequestNumber = payload?.pull_request?.number
     const issueNumber = pullRequestNumber || payload?.issue?.number
-
-    if (isPrOnly && !pullRequestNumber) {
-      core.setFailed('No pull request in current context.')
-      return
-    }
 
     const {matchFound} = matchPhrase({
       comment,

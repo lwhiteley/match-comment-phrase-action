@@ -85,15 +85,13 @@ function getInputs() {
         trimWhitespace: true
     });
     const isCodeIncluded = (0, resolve_boolean_input_1.resolveBooleanInput)(core.getInput('include_code', { trimWhitespace: true }));
-    const isPrOnly = (0, resolve_boolean_input_1.resolveBooleanInput)(core.getInput('pr_only', { trimWhitespace: true }));
     const mode = core.getInput('mode', { trimWhitespace: true });
     const reactions = core.getInput('reactions', { trimWhitespace: true });
-    const providedToken = core.getInput('GITHUB_TOKEN', { trimWhitespace: true });
+    const providedToken = core.getInput('token', { trimWhitespace: true });
     const githubToken = providedToken || GITHUB_TOKEN || '';
     return {
         reactions,
         githubToken,
-        isPrOnly,
         phrase,
         isCodeIncluded,
         mode: mode || 'starts_line'
@@ -151,7 +149,7 @@ function run() {
     var _a, _b, _c, _d, _e, _f;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { reactions, githubToken, isPrOnly, phrase, mode, isCodeIncluded } = (0, get_inputs_1.getInputs)();
+            const { reactions, githubToken, phrase, mode, isCodeIncluded } = (0, get_inputs_1.getInputs)();
             if (reactions && !githubToken) {
                 core.setFailed('If "reactions" is supplied, GITHUB_TOKEN is required');
                 return;
@@ -161,10 +159,6 @@ function run() {
             const commentId = ((_c = payload === null || payload === void 0 ? void 0 : payload.comment) === null || _c === void 0 ? void 0 : _c.id) || ((_d = payload === null || payload === void 0 ? void 0 : payload.review) === null || _d === void 0 ? void 0 : _d.id);
             const pullRequestNumber = (_e = payload === null || payload === void 0 ? void 0 : payload.pull_request) === null || _e === void 0 ? void 0 : _e.number;
             const issueNumber = pullRequestNumber || ((_f = payload === null || payload === void 0 ? void 0 : payload.issue) === null || _f === void 0 ? void 0 : _f.number);
-            if (isPrOnly && !pullRequestNumber) {
-                core.setFailed('No pull request in current context.');
-                return;
-            }
             const { matchFound } = (0, match_phrase_1.matchPhrase)({
                 comment,
                 phrase,

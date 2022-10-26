@@ -14,12 +14,9 @@ inputs:
   include_code:
     description: 'boolean to determine if the action should also search in code snippets'
     default: 'false'
-  pr_only:
-    description: 'When "true", limits action to run for pull requests only. Will throw error if pull request context is not found'
-    default: 'false'
   reactions:
     description: 'Comma separated list of valid reactions to add to the comment if phrase is found'
-  GITHUB_TOKEN:
+  token:
     description: 'The github token of the run. This can also be provided as an environment variable'
 runs:
   using: 'node16'
