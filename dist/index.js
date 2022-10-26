@@ -159,7 +159,8 @@ function run() {
             const { payload } = github_1.context;
             const comment = ((_a = payload === null || payload === void 0 ? void 0 : payload.comment) === null || _a === void 0 ? void 0 : _a.body) || ((_b = payload === null || payload === void 0 ? void 0 : payload.review) === null || _b === void 0 ? void 0 : _b.body) || '';
             const commentId = ((_c = payload === null || payload === void 0 ? void 0 : payload.comment) === null || _c === void 0 ? void 0 : _c.id) || ((_d = payload === null || payload === void 0 ? void 0 : payload.review) === null || _d === void 0 ? void 0 : _d.id);
-            const pullRequestNumber = (_f = (_e = github_1.context.payload) === null || _e === void 0 ? void 0 : _e.pull_request) === null || _f === void 0 ? void 0 : _f.number;
+            const pullRequestNumber = (_e = payload === null || payload === void 0 ? void 0 : payload.pull_request) === null || _e === void 0 ? void 0 : _e.number;
+            const issueNumber = pullRequestNumber || ((_f = payload === null || payload === void 0 ? void 0 : payload.issue) === null || _f === void 0 ? void 0 : _f.number);
             if (isPrOnly && !pullRequestNumber) {
                 core.setFailed('No pull request in current context.');
                 return;
@@ -172,7 +173,7 @@ function run() {
             });
             core.setOutput('match_found', matchFound);
             core.setOutput('comment_body', comment);
-            core.setOutput('pull_request_number', pullRequestNumber);
+            core.setOutput('issue_number', issueNumber);
             if (!matchFound || !reactions)
                 return;
             yield (0, add_reactions_1.addReactions)({ commentId, reactions, token: githubToken });

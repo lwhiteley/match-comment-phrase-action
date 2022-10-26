@@ -18,7 +18,8 @@ async function run(): Promise<void> {
     const comment = payload?.comment?.body || payload?.review?.body || ''
     const commentId = payload?.comment?.id || payload?.review?.id
 
-    const pullRequestNumber = context.payload?.pull_request?.number
+    const pullRequestNumber = payload?.pull_request?.number
+    const issueNumber = pullRequestNumber || payload?.issue?.number
 
     if (isPrOnly && !pullRequestNumber) {
       core.setFailed('No pull request in current context.')
@@ -34,7 +35,7 @@ async function run(): Promise<void> {
 
     core.setOutput('match_found', matchFound)
     core.setOutput('comment_body', comment)
-    core.setOutput('pull_request_number', pullRequestNumber)
+    core.setOutput('issue_number', issueNumber)
 
     if (!matchFound || !reactions) return
 

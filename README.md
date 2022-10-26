@@ -17,7 +17,7 @@ jobs:
   preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: lwhiteley/match-comment-phrase-action@v1.2.1
+      - uses: lwhiteley/match-comment-phrase-action@v1.3.0
         id: check
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
@@ -52,8 +52,8 @@ And if you specify a reaction, you have to provide the `GITHUB_TOKEN` env variab
 
 ## Outputs
 
-| Output              | Description                                             |
-| ------------------- | ------------------------------------------------------- |
-| match_found         | 'true' or 'false' depending on if the phrase was found. |
-| comment_body        | The comment body.                                       |
-| pull_request_number | the associated pull request number.                     |
+| Output       | Description                                             |
+| ------------ | ------------------------------------------------------- |
+| match_found  | 'true' or 'false' depending on if the phrase was found. |
+| comment_body | The comment body.                                       |
+| issue_number | the associated issue or pull request number.            |
