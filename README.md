@@ -17,7 +17,7 @@ jobs:
   preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: smart-host/match-comment-phrase-action@v1.2.0
+      - uses: lwhiteley/match-comment-phrase-action@v1.2.1
         id: check
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
