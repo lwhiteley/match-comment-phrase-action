@@ -3,6 +3,7 @@ import {addReactions} from './add-reactions'
 import {context} from '@actions/github'
 import {getInputs} from './get-inputs'
 import {matchPhrase} from './match-phrase'
+import {getPullRequestDetails} from './get-pull-request-details'
 
 async function run(): Promise<void> {
   try {
@@ -27,9 +28,17 @@ async function run(): Promise<void> {
       isCodeIncluded
     })
 
+    const pullRequestInfo = await getPullRequestDetails({
+      token: githubToken,
+      pullRequestNumber,
+      owner: payload?.repository?.owner?.login || '',
+      repo: payload?.repository?.name || ''
+    })
+
     core.setOutput('match_found', matchFound)
     core.setOutput('comment_body', comment)
     core.setOutput('issue_number', issueNumber)
+    core.setOutput('sha', pullRequestInfo?.sha)
 
     if (!matchFound || !reactions) return
 
