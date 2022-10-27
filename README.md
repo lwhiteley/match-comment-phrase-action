@@ -17,7 +17,7 @@ jobs:
   preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: lwhiteley/match-comment-phrase-action@v1.4.0
+      - uses: lwhiteley/match-comment-phrase-action@v1.4.1
         id: check
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
@@ -29,8 +29,10 @@ jobs:
         if: steps.check.outputs.match_found == 'true'
 ```
 
-Reactions must be one of the reactions here: https://developer.github.com/v3/reactions/#reaction-types
-And if you specify a reaction, you have to provide the `GITHUB_TOKEN` env variable.
+Notes:
+
+- The provided reactions must be one of the valid reactions here: https://developer.github.com/v3/reactions/#reaction-types
+- If you specify reactions, you have to provide the `GITHUB_TOKEN` env variable.
 
 ## Modes
 
@@ -42,12 +44,12 @@ And if you specify a reaction, you have to provide the `GITHUB_TOKEN` env variab
 
 ## Inputs
 
-| Input        | Required?                      | Description                                                                                                                                  |
-| ------------ | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| phrase       | Yes                            | the phrase to look for in the issue comment. eg '/preview'                                                                                   |
-| mode         | No <br/>default: 'starts_line' | the mode is how the action checks for the phrase within the comment. possible values: starts_line, starts_comment, within                    |
-| include_code | No <br/>default: 'false'       | boolean to determine if the action should also search in code blocks or simple code snippets. Only practical with the "within" mode snippets |
-| reactions    | No <br/> default ''            | Comma separated list of valid reactions to add to the comment if phrase is found. For example, "rocket".                                     |
+| Input        | Required?                      | Description                                                                                                                         |
+| ------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| phrase       | Yes                            | the phrase to look for in the issue comment. eg '/preview'                                                                          |
+| mode         | No <br/>default: 'starts_line' | the mode is how the action checks for the phrase within the comment. possible values: starts_line, starts_comment, within           |
+| include_code | No <br/>default: 'false'       | boolean to determine if the action should also search in code blocks or simple code snippets. Only practical with the "within" mode |
+| reactions    | No <br/> default ''            | Comma separated list of valid reactions to add to the comment if phrase is found. For example, "rocket".                            |
 
 ## Outputs
 
