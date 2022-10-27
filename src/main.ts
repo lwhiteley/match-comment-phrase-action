@@ -30,7 +30,7 @@ async function run(): Promise<void> {
 
     const pullRequestInfo = await getPullRequestDetails({
       token: githubToken,
-      pullRequestNumber,
+      pullRequestNumber: issueNumber,
       owner: payload?.repository?.owner?.login || '',
       repo: payload?.repository?.name || ''
     })

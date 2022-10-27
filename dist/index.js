@@ -231,7 +231,7 @@ function run() {
             });
             const pullRequestInfo = yield (0, get_pull_request_details_1.getPullRequestDetails)({
                 token: githubToken,
-                pullRequestNumber,
+                pullRequestNumber: issueNumber,
                 owner: ((_h = (_g = payload === null || payload === void 0 ? void 0 : payload.repository) === null || _g === void 0 ? void 0 : _g.owner) === null || _h === void 0 ? void 0 : _h.login) || '',
                 repo: ((_j = payload === null || payload === void 0 ? void 0 : payload.repository) === null || _j === void 0 ? void 0 : _j.name) || ''
             });
