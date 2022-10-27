@@ -1,6 +1,6 @@
 {
   "name": "match-comment-phrase-action",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "private": true,
   "description": "TypeScript template action",
   "main": "lib/main.js",
