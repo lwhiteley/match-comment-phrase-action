@@ -58,4 +58,4 @@ Notes:
 | match_found  | 'true' or 'false' depending on if the phrase was found. |
 | comment_body | The comment body.                                       |
 | issue_number | the associated issue or pull request number.            |
-| sha          | the associated head sha of pull request number.         |
+| sha          | the associated head sha of pull request.                |
