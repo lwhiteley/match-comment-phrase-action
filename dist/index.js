@@ -85,6 +85,7 @@ function getInputs() {
         trimWhitespace: true
     });
     const isCodeIncluded = (0, resolve_boolean_input_1.resolveBooleanInput)(core.getInput('include_code', { trimWhitespace: true }));
+    const isOwnLineEnabled = (0, resolve_boolean_input_1.resolveBooleanInput)(core.getInput('own_line', { trimWhitespace: true }));
     const mode = core.getInput('mode', { trimWhitespace: true });
     const reactions = core.getInput('reactions', { trimWhitespace: true });
     const providedToken = core.getInput('token', { trimWhitespace: true });
@@ -94,6 +95,7 @@ function getInputs() {
         githubToken,
         phrase,
         isCodeIncluded,
+        isOwnLineEnabled,
         mode: mode || 'starts_line'
     };
 }
@@ -216,7 +218,7 @@ function run() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { reactions, githubToken, phrase, mode, isCodeIncluded } = (0, get_inputs_1.getInputs)();
+            const { reactions, githubToken, phrase, mode, isCodeIncluded, isOwnLineEnabled } = (0, get_inputs_1.getInputs)();
             if (reactions && !githubToken) {
                 core.setFailed('If "reactions" is supplied, GITHUB_TOKEN is required');
                 return;
@@ -226,11 +228,12 @@ function run() {
             const commentId = ((_c = payload === null || payload === void 0 ? void 0 : payload.comment) === null || _c === void 0 ? void 0 : _c.id) || ((_d = payload === null || payload === void 0 ? void 0 : payload.review) === null || _d === void 0 ? void 0 : _d.id);
             const pullRequestNumber = ((_e = payload === null || payload === void 0 ? void 0 : payload.pull_request) === null || _e === void 0 ? void 0 : _e.number) || (payload === null || payload === void 0 ? void 0 : payload.number);
             const issueNumber = pullRequestNumber || ((_f = payload === null || payload === void 0 ? void 0 : payload.issue) === null || _f === void 0 ? void 0 : _f.number);
-            const { matchFound } = (0, match_phrase_1.matchPhrase)({
+            const { matchFound, commentLine } = (0, match_phrase_1.matchPhrase)({
                 comment,
                 phrase,
                 mode,
-                isCodeIncluded
+                isCodeIncluded,
+                isOwnLineEnabled
             });
             const pullRequestInfo = yield (0, get_pull_request_details_1.getPullRequestDetails)({
                 token: githubToken,
@@ -242,6 +245,7 @@ function run() {
             const issueActor = ((_p = (_o = payload === null || payload === void 0 ? void 0 : payload.comment) === null || _o === void 0 ? void 0 : _o.user) === null || _p === void 0 ? void 0 : _p.login) || ((_r = (_q = payload === null || payload === void 0 ? void 0 : payload.review) === null || _q === void 0 ? void 0 : _q.user) === null || _r === void 0 ? void 0 : _r.login);
             core.setOutput('match_found', matchFound);
             core.setOutput('comment_body', comment);
+            core.setOutput('comment_line', commentLine);
             core.setOutput('issue_number', issueNumber);
             core.setOutput('sha', pullRequestInfo === null || pullRequestInfo === void 0 ? void 0 : pullRequestInfo.sha);
             core.setOutput('issue_actor', issueActor || issueCreator);
@@ -276,34 +280,49 @@ function maskCodeSnippets(comment) {
         .replace(/(`.+?`)/gms, mask);
 }
 exports.maskCodeSnippets = maskCodeSnippets;
-function matchPhrase({ comment: originalComment = '', phrase, mode = 'starts_line', isCodeIncluded }) {
+function matchPhrase({ comment: originalComment = '', phrase, mode = 'starts_line', isCodeIncluded = false, isOwnLineEnabled = false }) {
     const sanitizedComment = originalComment.trim();
     if (!sanitizedComment || !phrase)
         return { matchFound: false };
     const comment = isCodeIncluded
         ? sanitizedComment
         : maskCodeSnippets(sanitizedComment);
+    const commentLines = comment.split('\n').filter(Boolean);
     switch (mode) {
         /**
          * Checks if phrase starts any line of the comment
          */
         case 'starts_line': {
-            const commentLines = comment.split('\n').filter(Boolean);
+            const commentLine = commentLines.find(line => isOwnLineEnabled
+                ? line.trim() === phrase
+                : line.trim().startsWith(phrase)) || '';
             return {
-                matchFound: commentLines.some(line => line.trim().startsWith(phrase))
+                matchFound: !!commentLine,
+                commentLine: commentLine.trim()
             };
         }
         /**
          * Checks if phrase is at the beginning of the comment
          */
         case 'starts_comment': {
-            return { matchFound: comment.startsWith(phrase) };
+            const [firstLine] = commentLines;
+            const matchFound = isOwnLineEnabled
+                ? firstLine.trim() === phrase
+                : firstLine.startsWith(phrase);
+            return {
+                matchFound,
+                commentLine: matchFound ? firstLine.trim() : ''
+            };
         }
         /**
          * Checks if phrase is anywhere within the comment
          */
         case 'within': {
-            return { matchFound: comment.includes(phrase) };
+            const commentLine = commentLines.find(line => line.includes(phrase)) || '';
+            return {
+                matchFound: !!commentLine,
+                commentLine: commentLine.trim()
+            };
         }
         default: {
             return { matchFound: false };
@@ -322,9 +341,10 @@ exports.matchPhrase = matchPhrase;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.resolveBooleanInput = void 0;
-const resolveBooleanInput = (value = '') => {
+const resolveBooleanInput = (value = '', defaultValue = false) => {
     var _a;
-    return ((_a = value === null || value === void 0 ? void 0 : value.toString()) === null || _a === void 0 ? void 0 : _a.toLowerCase()) === 'true';
+    const input = value !== null && value !== void 0 ? value : defaultValue;
+    return ((_a = input === null || input === void 0 ? void 0 : input.toString()) === null || _a === void 0 ? void 0 : _a.toLowerCase()) === 'true';
 };
 exports.resolveBooleanInput = resolveBooleanInput;
 

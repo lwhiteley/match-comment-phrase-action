@@ -8,6 +8,7 @@ interface Inputs {
   phrase: string
   mode: Mode
   isCodeIncluded: boolean
+  isOwnLineEnabled: boolean
 }
 
 export function getInputs(): Inputs {
@@ -19,6 +20,9 @@ export function getInputs(): Inputs {
   })
   const isCodeIncluded = resolveBooleanInput(
     core.getInput('include_code', {trimWhitespace: true})
+  )
+  const isOwnLineEnabled = resolveBooleanInput(
+    core.getInput('own_line', {trimWhitespace: true})
   )
 
   const mode = core.getInput('mode', {trimWhitespace: true}) as Mode
@@ -32,6 +36,7 @@ export function getInputs(): Inputs {
     githubToken,
     phrase,
     isCodeIncluded,
+    isOwnLineEnabled,
     mode: mode || 'starts_line'
   }
 }

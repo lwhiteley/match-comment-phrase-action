@@ -33,6 +33,31 @@ describe('matchPhrase', () => {
         }).matchFound
       ).toEqual(true)
     })
+
+    describe('isOwnLineEnabled: true', () => {
+      test('match when phrase is found at any start of line with no other characters', () => {
+        const result = matchPhrase({
+          comment: 'blach blacj\n ioef\n /preview',
+          phrase: '/preview',
+          isCodeIncluded: true,
+          isOwnLineEnabled: true,
+          mode: 'starts_line'
+        })
+        expect(result.matchFound).toEqual(true)
+        expect(result.commentLine).toEqual('/preview')
+      })
+      test('does not match when phrase is found at any start of line with other characters in same line', () => {
+        const result = matchPhrase({
+          comment: 'blach blacj\n ioef\n /preview gjgkjkgkj',
+          phrase: '/preview',
+          isCodeIncluded: true,
+          isOwnLineEnabled: true,
+          mode: 'starts_line'
+        })
+        expect(result.matchFound).toEqual(false)
+        expect(result.commentLine).toEqual('')
+      })
+    })
   })
 
   describe('mode: starts_comment', () => {
@@ -65,6 +90,31 @@ describe('matchPhrase', () => {
           mode: 'starts_comment'
         }).matchFound
       ).toEqual(true)
+    })
+
+    describe('isOwnLineEnabled: true', () => {
+      test('match when phrase is found at the start of the comment with no other characters', () => {
+        const result = matchPhrase({
+          comment: ' /preview  \n yguihuygyygu',
+          phrase: '/preview',
+          isCodeIncluded: true,
+          isOwnLineEnabled: true,
+          mode: 'starts_comment'
+        })
+        expect(result.matchFound).toEqual(true)
+        expect(result.commentLine).toEqual('/preview')
+      })
+      test('does not match when phrase is found at the start of the comment with other characters in same line', () => {
+        const result = matchPhrase({
+          comment: '/preview gjgkjkgkj blach blacj\n ioef\n ',
+          phrase: '/preview',
+          isCodeIncluded: true,
+          isOwnLineEnabled: true,
+          mode: 'starts_comment'
+        })
+        expect(result.matchFound).toEqual(false)
+        expect(result.commentLine).toEqual('')
+      })
     })
   })
 

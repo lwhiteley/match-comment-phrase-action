@@ -7,7 +7,14 @@ import {getPullRequestDetails} from './get-pull-request-details'
 
 async function run(): Promise<void> {
   try {
-    const {reactions, githubToken, phrase, mode, isCodeIncluded} = getInputs()
+    const {
+      reactions,
+      githubToken,
+      phrase,
+      mode,
+      isCodeIncluded,
+      isOwnLineEnabled
+    } = getInputs()
 
     if (reactions && !githubToken) {
       core.setFailed('If "reactions" is supplied, GITHUB_TOKEN is required')
@@ -21,11 +28,12 @@ async function run(): Promise<void> {
     const pullRequestNumber = payload?.pull_request?.number || payload?.number
     const issueNumber = pullRequestNumber || payload?.issue?.number
 
-    const {matchFound} = matchPhrase({
+    const {matchFound, commentLine} = matchPhrase({
       comment,
       phrase,
       mode,
-      isCodeIncluded
+      isCodeIncluded,
+      isOwnLineEnabled
     })
 
     const pullRequestInfo = await getPullRequestDetails({
@@ -42,6 +50,7 @@ async function run(): Promise<void> {
 
     core.setOutput('match_found', matchFound)
     core.setOutput('comment_body', comment)
+    core.setOutput('comment_line', commentLine)
     core.setOutput('issue_number', issueNumber)
     core.setOutput('sha', pullRequestInfo?.sha)
     core.setOutput('issue_actor', issueActor || issueCreator)

@@ -5,9 +5,11 @@ interface MatchPhraseOptions {
   phrase: string
   mode: Mode
   isCodeIncluded: boolean
+  isOwnLineEnabled?: boolean
 }
 interface MatchPhraseResult {
   matchFound: boolean
+  commentLine?: string
 }
 
 export function maskCodeSnippets(comment: string): string {
@@ -23,7 +25,8 @@ export function matchPhrase({
   comment: originalComment = '',
   phrase,
   mode = 'starts_line',
-  isCodeIncluded
+  isCodeIncluded = false,
+  isOwnLineEnabled = false
 }: MatchPhraseOptions): MatchPhraseResult {
   const sanitizedComment = originalComment.trim()
   if (!sanitizedComment || !phrase) return {matchFound: false}
@@ -31,16 +34,23 @@ export function matchPhrase({
   const comment = isCodeIncluded
     ? sanitizedComment
     : maskCodeSnippets(sanitizedComment)
+  const commentLines: string[] = comment.split('\n').filter(Boolean)
 
   switch (mode) {
     /**
      * Checks if phrase starts any line of the comment
      */
     case 'starts_line': {
-      const commentLines: string[] = comment.split('\n').filter(Boolean)
+      const commentLine =
+        commentLines.find(line =>
+          isOwnLineEnabled
+            ? line.trim() === phrase
+            : line.trim().startsWith(phrase)
+        ) || ''
 
       return {
-        matchFound: commentLines.some(line => line.trim().startsWith(phrase))
+        matchFound: !!commentLine,
+        commentLine: commentLine.trim()
       }
     }
 
@@ -48,14 +58,26 @@ export function matchPhrase({
      * Checks if phrase is at the beginning of the comment
      */
     case 'starts_comment': {
-      return {matchFound: comment.startsWith(phrase)}
+      const [firstLine] = commentLines
+      const matchFound = isOwnLineEnabled
+        ? firstLine.trim() === phrase
+        : firstLine.startsWith(phrase)
+      return {
+        matchFound,
+        commentLine: matchFound ? firstLine.trim() : ''
+      }
     }
 
     /**
      * Checks if phrase is anywhere within the comment
      */
     case 'within': {
-      return {matchFound: comment.includes(phrase)}
+      const commentLine = commentLines.find(line => line.includes(phrase)) || ''
+
+      return {
+        matchFound: !!commentLine,
+        commentLine: commentLine.trim()
+      }
     }
 
     default: {

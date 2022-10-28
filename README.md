@@ -19,7 +19,7 @@ jobs:
   preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: lwhiteley/match-comment-phrase-action@v1.4.6
+      - uses: lwhiteley/match-comment-phrase-action@v1.5.0
         id: check
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
@@ -35,7 +35,7 @@ Notes:
 
 - The provided reactions must be one of the valid reactions here: https://developer.github.com/v3/reactions/#reaction-types
 - If you specify reactions, you have to provide the `GITHUB_TOKEN` env variable.
-- By default this action ignores phrases found in code blocks so actions are not triggered unintentionally
+- By default, this action ignores phrases found in code blocks so actions are not triggered unintentionally
 
 ## Modes
 
@@ -52,6 +52,7 @@ Notes:
 | phrase       | Yes                            | the phrase to look for in the issue comment. eg '/preview'                                                                          |
 | mode         | No <br/>default: 'starts_line' | the mode is how the action checks for the phrase within the comment. possible values: starts_line, starts_comment, within           |
 | include_code | No <br/>default: 'false'       | boolean to determine if the action should also search in code blocks or simple code snippets. Only practical with the "within" mode |
+| own_line     | No <br/>default: 'false'       | boolean to determine if phrase is only matched if it occupies its own line. Applicable modes: "starts_line", "starts_comment"       |
 | reactions    | No <br/> default: ''           | Comma separated list of valid reactions to add to the comment if phrase is found. For example, "rocket".                            |
 
 ## Outputs
@@ -60,12 +61,13 @@ Notes:
 | ------------- | ----------------------------------------------------------------------------------- |
 | match_found   | Boolean string depending on if the phrase was found. Possible values: true or false |
 | comment_body  | The comment body.                                                                   |
+| comment_line  | The comment line where the first valid match of the phrase is found                 |
 | issue_number  | the associated issue or pull request number.                                        |
 | sha           | the associated head sha of pull request.                                            |
 | issue_creator | the creator of the issue.                                                           |
 | issue_actor   | the user that commented. Defaults to issue creator if not found                     |
 
-Similar actions:
+## Similar actions:
 
 - https://github.com/machine-learning-apps/actions-chatops
 - https://github.com/Khan/pull-request-comment-trigger

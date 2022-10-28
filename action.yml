@@ -14,6 +14,9 @@ inputs:
   include_code:
     description: 'boolean to determine if the action should also search in code snippets'
     default: 'false'
+  own_line:
+    description: 'boolean to determine if phrase is only matched if it occupies its own line. Applicable modes: "starts_line", "starts_comment"  '
+    default: 'false'
   reactions:
     description: 'Comma separated list of valid reactions to add to the comment if phrase is found'
     default: ''
@@ -25,6 +28,8 @@ outputs:
     description: 'Boolean string depending on if the phrase was found. Possible values: true or false'
   comment_body:
     description: 'The comment body'
+  comment_line:
+    description: 'The comment line where the first valid match of the phrase is found'
   issue_number:
     description: 'the associated issue or pull request number'
   sha:
