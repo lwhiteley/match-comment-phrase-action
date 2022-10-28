@@ -1,6 +1,6 @@
-# Match Comment Phrase (Github Action)
+# Match Comment Phrase
 
-matches a phrase within a github comment and outputs a boolean value when found by a specific mode
+Github action to match a phrase within a github comment and outputs a boolean value when found by a specific mode
 
 ## Example usage
 
@@ -19,7 +19,7 @@ jobs:
   preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: lwhiteley/match-comment-phrase-action@v1.4.5
+      - uses: lwhiteley/match-comment-phrase-action@v1.4.6
         id: check
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
@@ -35,6 +35,7 @@ Notes:
 
 - The provided reactions must be one of the valid reactions here: https://developer.github.com/v3/reactions/#reaction-types
 - If you specify reactions, you have to provide the `GITHUB_TOKEN` env variable.
+- By default this action ignores phrases found in code blocks so actions are not triggered unintentionally
 
 ## Modes
 
