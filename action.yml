@@ -1,5 +1,5 @@
 name: 'Match Comment Phrase'
-description: 'matches a phrase within a github comment and outputs a boolean value when found by a specific mode'
+description: 'github action to match a phrase within a github comment and outputs a boolean value when found by a specific mode'
 author: 'Layton Whiteley'
 branding:
   icon: 'bell'
