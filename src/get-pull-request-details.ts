@@ -10,6 +10,7 @@ interface GetPullRequestDetailsOptions {
 
 interface GetPullRequestDetailsResults {
   sha: string
+  creator: string
 }
 
 export const getPullRequestDetails = async ({
@@ -28,7 +29,10 @@ export const getPullRequestDetails = async ({
       pull_number: pullRequestNumber
     })
 
-    return {sha: result.data.head.sha}
+    const creator = result.data.user?.login || ''
+    const {sha} = result.data.head
+
+    return {sha, creator}
   } catch (error) {
     core.info('could not get pull request data')
     return null

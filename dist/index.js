@@ -144,6 +144,7 @@ exports.getPullRequestDetails = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github_1 = __nccwpck_require__(5438);
 const getPullRequestDetails = ({ pullRequestNumber, token, owner, repo }) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     if (!pullRequestNumber)
         return null;
     const octokit = (0, github_1.getOctokit)(token);
@@ -153,7 +154,9 @@ const getPullRequestDetails = ({ pullRequestNumber, token, owner, repo }) => __a
             repo,
             pull_number: pullRequestNumber
         });
-        return { sha: result.data.head.sha };
+        const creator = ((_a = result.data.user) === null || _a === void 0 ? void 0 : _a.login) || '';
+        const { sha } = result.data.head;
+        return { sha, creator };
     }
     catch (error) {
         core.info('could not get pull request data');
@@ -210,7 +213,7 @@ const get_inputs_1 = __nccwpck_require__(7428);
 const match_phrase_1 = __nccwpck_require__(1521);
 const get_pull_request_details_1 = __nccwpck_require__(3079);
 function run() {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { reactions, githubToken, phrase, mode, isCodeIncluded } = (0, get_inputs_1.getInputs)();
@@ -235,10 +238,14 @@ function run() {
                 owner: ((_h = (_g = payload === null || payload === void 0 ? void 0 : payload.repository) === null || _g === void 0 ? void 0 : _g.owner) === null || _h === void 0 ? void 0 : _h.login) || '',
                 repo: ((_j = payload === null || payload === void 0 ? void 0 : payload.repository) === null || _j === void 0 ? void 0 : _j.name) || ''
             });
+            const issueCreator = ((_l = (_k = payload === null || payload === void 0 ? void 0 : payload.pull_request) === null || _k === void 0 ? void 0 : _k.user) === null || _l === void 0 ? void 0 : _l.login) || ((_m = payload === null || payload === void 0 ? void 0 : payload.user) === null || _m === void 0 ? void 0 : _m.login);
+            const issueActor = ((_p = (_o = payload === null || payload === void 0 ? void 0 : payload.comment) === null || _o === void 0 ? void 0 : _o.user) === null || _p === void 0 ? void 0 : _p.login) || ((_r = (_q = payload === null || payload === void 0 ? void 0 : payload.review) === null || _q === void 0 ? void 0 : _q.user) === null || _r === void 0 ? void 0 : _r.login);
             core.setOutput('match_found', matchFound);
             core.setOutput('comment_body', comment);
             core.setOutput('issue_number', issueNumber);
             core.setOutput('sha', pullRequestInfo === null || pullRequestInfo === void 0 ? void 0 : pullRequestInfo.sha);
+            core.setOutput('issue_actor', issueActor || issueCreator);
+            core.setOutput('issue_creator', issueCreator);
             if (!matchFound || !reactions)
                 return;
             yield (0, add_reactions_1.addReactions)({ commentId, reactions, token: githubToken });

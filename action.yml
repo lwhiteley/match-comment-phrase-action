@@ -1,4 +1,4 @@
-name: 'match-comment-phrase-action'
+name: 'Match Comment Phrase'
 description: 'matches a phrase within a github comment and outputs a boolean value when found by a specific mode'
 author: 'Layton Whiteley'
 branding:
@@ -16,8 +16,23 @@ inputs:
     default: 'false'
   reactions:
     description: 'Comma separated list of valid reactions to add to the comment if phrase is found'
+    default: ''
   token:
     description: 'The github token of the run. This can also be provided as an environment variable'
+    default: ''
+outputs:
+  match_found:
+    description: 'Boolean string depending on if the phrase was found. Possible values: true or false'
+  comment_body:
+    description: 'The comment body'
+  issue_number:
+    description: 'the associated issue or pull request number'
+  sha:
+    description: 'the associated head sha of pull request'
+  issue_creator:
+    description: 'the creator of the issue'
+  issue_actor:
+    description: 'the user that commented. Defaults to issue creator if not found'
 runs:
   using: 'node16'
   main: 'dist/index.js'

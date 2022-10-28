@@ -35,10 +35,17 @@ async function run(): Promise<void> {
       repo: payload?.repository?.name || ''
     })
 
+    const issueCreator =
+      payload?.pull_request?.user?.login || payload?.user?.login
+    const issueActor =
+      payload?.comment?.user?.login || payload?.review?.user?.login
+
     core.setOutput('match_found', matchFound)
     core.setOutput('comment_body', comment)
     core.setOutput('issue_number', issueNumber)
     core.setOutput('sha', pullRequestInfo?.sha)
+    core.setOutput('issue_actor', issueActor || issueCreator)
+    core.setOutput('issue_creator', issueCreator)
 
     if (!matchFound || !reactions) return
 
