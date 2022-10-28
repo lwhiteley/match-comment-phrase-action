@@ -18,7 +18,7 @@ async function run(): Promise<void> {
     const comment = payload?.comment?.body || payload?.review?.body || ''
     const commentId = payload?.comment?.id || payload?.review?.id
 
-    const pullRequestNumber = payload?.pull_request?.number
+    const pullRequestNumber = payload?.pull_request?.number || payload?.number
     const issueNumber = pullRequestNumber || payload?.issue?.number
 
     const {matchFound} = matchPhrase({

@@ -224,7 +224,7 @@ function run() {
             const { payload } = github_1.context;
             const comment = ((_a = payload === null || payload === void 0 ? void 0 : payload.comment) === null || _a === void 0 ? void 0 : _a.body) || ((_b = payload === null || payload === void 0 ? void 0 : payload.review) === null || _b === void 0 ? void 0 : _b.body) || '';
             const commentId = ((_c = payload === null || payload === void 0 ? void 0 : payload.comment) === null || _c === void 0 ? void 0 : _c.id) || ((_d = payload === null || payload === void 0 ? void 0 : payload.review) === null || _d === void 0 ? void 0 : _d.id);
-            const pullRequestNumber = (_e = payload === null || payload === void 0 ? void 0 : payload.pull_request) === null || _e === void 0 ? void 0 : _e.number;
+            const pullRequestNumber = ((_e = payload === null || payload === void 0 ? void 0 : payload.pull_request) === null || _e === void 0 ? void 0 : _e.number) || (payload === null || payload === void 0 ? void 0 : payload.number);
             const issueNumber = pullRequestNumber || ((_f = payload === null || payload === void 0 ? void 0 : payload.issue) === null || _f === void 0 ? void 0 : _f.number);
             const { matchFound } = (0, match_phrase_1.matchPhrase)({
                 comment,
