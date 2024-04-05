@@ -11,7 +11,7 @@ export const REACTIONS = [
   'rocket',
   'eyes'
 ] as const
-export type Reaction = typeof REACTIONS[number]
+export type Reaction = (typeof REACTIONS)[number]
 
 interface AddReactionsOptions {
   commentId: number

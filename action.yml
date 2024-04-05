@@ -39,5 +39,5 @@ outputs:
   issue_actor:
     description: 'the user that commented. Defaults to issue creator if not found'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
